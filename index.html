@@ -40,9 +40,9 @@
     <span id="money"></span>
   </div>
   <div class="slot-machine">
-    <span class="slot" id="slot1">🍀</span>
-    <span class="slot" id="slot2">⭐</span>
-    <span class="slot" id="slot3">⛄</span>
+    <span class="slot" id="slot1"><img src="image1.png" alt="slot image"></span>
+    <span class="slot" id="slot2"><img src="image2.png" alt="slot image"></span>
+    <span class="slot" id="slot3"><img src="image3.png" alt="slot image"></span>
   </div>
   <button onclick="startSlotMachine()">슬롯머신 돌리기</button>
   <button onclick="stopSlotMachine()">멈추기</button>
@@ -54,7 +54,7 @@
     let isSpinning = false; // 슬롯머신이 도는지 상태 확인
     document.getElementById("money").innerText = "남은 돈: " + money + "원";
 
-    const symbols = ["🍀", "⭐", "⛄", "💘", "🐬"];
+    const symbols = ["image1.png", "image2.png", "image3.png", "imae4.png", "image5.png"];
     const slots = document.querySelectorAll(".slot");
     const resultElement = document.getElementById("result");
 
