@@ -54,7 +54,7 @@
     let isSpinning = false; // 슬롯머신이 도는지 상태 확인
     document.getElementById("money").innerText = "남은 돈: " + money + "원";
 
-    const symbols = ["image1.png", "image2.png", "image3.png", "imae4.png", "image5.png"];
+    const symbols = ["image1.png", "image2.png", "image3.png", "imaGe4.png", "image5.png"];
     const slots = document.querySelectorAll(".slot img");
     const resultElement = document.getElementById("result");
 
@@ -76,7 +76,7 @@
 
       const spinSlots = () => {
         slots.forEach((slot) => {
-          slot.innerHTML = getRandomSymbol(); // 무작위 이모티콘 설정
+          slot.src = getRandomSymbol(); // 무작위 이모티콘 설정
         });
       };
 
@@ -91,7 +91,7 @@
       // 최종 결과 설정
       const finalSymbols = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()];
       slots.forEach((slot, index) => {
-        slot.innerHTML = finalSymbols[index];
+        slot.src = finalSymbols[index];
       });
 
       // 결과 출력 및 돈 업데이트
