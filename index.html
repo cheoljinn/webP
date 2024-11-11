@@ -69,6 +69,7 @@
 
     function startSlotMachine() {
       if (isSpinning) return; // 이미 돌고 있을 때는 무시
+      if(money<=0) return;
       isSpinning = true;
       money -= 10;
       updateMoneyDisplay();
