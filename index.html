@@ -1,110 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>아...수업듣기싫어</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .slot-machine {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-      font-size: 3.5em;
-      margin-bottom: 20px;
-    }
-    .slot {
-      padding: 0 40px; 
-    }
-    button {
-      padding: 3px 10px;
-      font-size: 16px;
-      background-color: #99aed5;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수업 듣기 개싫다</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        /* 남은 돈 위치를 최상단에 고정 */
+        #money {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .slot-machine {
+            display: flex;
+            margin-top: 100px; /* 슬롯머신 위치를 아래로 */
+        }
+        .slot {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="info" style="background-color:#99d5ae; align-self:flex-start; margin: 30px;" >
-        <span id="money"></span>
-        </div>
-  <div class="slot-machine">
-    <span class="slot" id="slot1">🍀</span>
-    <span class="slot" id="slot2">⭐</span>
-    <span class="slot" id="slot3">⛄</span>
-  </div>
-  <button onclick="startSlotMachine()">슬롯머신 돌리기</button>
-  <p id="result"></p>
 
-  <script>
+<div id="money">남은 돈: 100원</div>
+<div id="result"></div>
+<div class="slot-machine">
+    <div class="slot">🍀</div>
+    <div class="slot">⭐</div>
+    <div class="slot">⛄</div>
+</div>
+<button onclick="startSlotMachine()">시작</button>
+<button onclick="stopSlotMachine()">멈추기</button>
 
+<script>
     let money = 100;
-    document.getElementById("money").innerText="남은 돈: "+money+"원";
-
+    let intervalId;
     const symbols = ["🍀", "⭐", "⛄", "💘", "🐬"];
     const slots = document.querySelectorAll(".slot");
     const resultElement = document.getElementById("result");
-
-    function updateMoneyDisplay() {
-      document.getElementById("money").innerText = "남은 돈: " + money + "원";
-    }
+    const moneyElement = document.getElementById("money");
 
     function getRandomSymbol() {
-      return symbols[Math.floor(Math.random() * symbols.length)];
+        return symbols[Math.floor(Math.random() * symbols.length)];
+    }
+
+    function updateMoneyDisplay() {
+        moneyElement.innerText = "남은 돈: " + money + "원";
     }
 
     function startSlotMachine() {
-      const interval = 100; // 변경시간(ms)
-      const iterations = 50; // 반복 횟수
-      const finalSymbols = [];
+        if (money < 10) {
+            resultElement.textContent = "돈이 부족합니다.";
+            return;
+        }
 
-      money-=10;
-      updateMoneyDisplay();
- 
-      for (let i = 0; i < slots.length; i++) {
-        finalSymbols.push(getRandomSymbol());
-      }
+        money -= 10;
+        updateMoneyDisplay();
 
-      let iterationCount = 0;
-      const spinSlots = () => {
-        iterationCount++;
-        slots.forEach((slot) => {    // 각 슬롯의 무작위 결과 설정
-        slot.innerHTML = getRandomSymbol();
-      });
+        const interval = 100;
+        const finalSymbols = [];
+        for (let i = 0; i < slots.length; i++) {
+            finalSymbols.push(getRandomSymbol());
+        }
 
-      if (iterationCount >= iterations) {
-        clearInterval(intervalId);
-        slots.forEach((slot, index) => {   // 최종 결과 설정
-          slot.innerHTML = finalSymbols[index];
+        let iterationCount = 0;
+        const iterations = 50;
+
+        intervalId = setInterval(() => {
+            iterationCount++;
+            slots.forEach((slot) => {
+                slot.innerHTML = getRandomSymbol();
+            });
+
+            if (iterationCount >= iterations) {
+                clearInterval(intervalId);
+                finalizeSlots(finalSymbols);
+            }
+        }, interval);
+    }
+
+    function stopSlotMachine() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            const finalSymbols = Array.from({ length: slots.length }, getRandomSymbol);
+            finalizeSlots(finalSymbols);
+        }
+    }
+
+    function finalizeSlots(finalSymbols) {
+        slots.forEach((slot, index) => {
+            slot.innerHTML = finalSymbols[index];
         });
 
-        // 결과 출력
         if (finalSymbols[0] === finalSymbols[1] && finalSymbols[1] === finalSymbols[2]) {
-          resultElement.textContent = "잭팟!";
-          money+=100;
-          updateMoneyDisplay();
+            resultElement.textContent = "잭팟!";
+            money += 100;
         } else if (finalSymbols[0] === finalSymbols[1] || finalSymbols[1] === finalSymbols[2] || finalSymbols[0] === finalSymbols[2]) {
-          resultElement.textContent = "2개 맞았음";
-          money+=10;
-          updateMoneyDisplay();
+            resultElement.textContent = "2개 맞았음";
+            money += 10;
         } else {
-          resultElement.textContent = "꽝!";
+            resultElement.textContent = "꽝!";
         }
-      }
-    };
-    const intervalId = setInterval(spinSlots, interval);
-  }
-  </script>
+        updateMoneyDisplay();
+    }
+</script>
+
 </body>
 </html>
