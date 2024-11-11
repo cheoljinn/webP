@@ -36,6 +36,9 @@
   </style>
 </head>
 <body>
+    <div class="info" style="background-color:#99d5ae; align-self:flex-start; margin: 30px;" >
+        <span id="money"></span>
+        </div>
   <div class="slot-machine">
     <span class="slot" id="slot1">🍀</span>
     <span class="slot" id="slot2">⭐</span>
@@ -45,9 +48,17 @@
   <p id="result"></p>
 
   <script>
+
+    let money = 100;
+    document.getElementById("money").innerText="남은 돈: "+money+"원";
+
     const symbols = ["🍀", "⭐", "⛄", "💘", "🐬"];
     const slots = document.querySelectorAll(".slot");
     const resultElement = document.getElementById("result");
+
+    function updateMoneyDisplay() {
+      document.getElementById("money").innerText = "남은 돈: " + money + "원";
+    }
 
     function getRandomSymbol() {
       return symbols[Math.floor(Math.random() * symbols.length)];
@@ -57,6 +68,9 @@
       const interval = 100; // 변경시간(ms)
       const iterations = 50; // 반복 횟수
       const finalSymbols = [];
+
+      money-=10;
+      updateMoneyDisplay();
  
       for (let i = 0; i < slots.length; i++) {
         finalSymbols.push(getRandomSymbol());
@@ -78,8 +92,12 @@
         // 결과 출력
         if (finalSymbols[0] === finalSymbols[1] && finalSymbols[1] === finalSymbols[2]) {
           resultElement.textContent = "잭팟!";
+          money+=100;
+          updateMoneyDisplay();
         } else if (finalSymbols[0] === finalSymbols[1] || finalSymbols[1] === finalSymbols[2] || finalSymbols[0] === finalSymbols[2]) {
           resultElement.textContent = "2개 맞았음";
+          money+=10;
+          updateMoneyDisplay();
         } else {
           resultElement.textContent = "꽝!";
         }
