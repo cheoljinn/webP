@@ -40,9 +40,9 @@
     <span id="money"></span>
   </div>
   <div class="slot-machine">
-    <span class="slot" id="slot1"><img src="image1.png" alt="slot image"></span>
-    <span class="slot" id="slot2"><img src="image2.png" alt="slot image"></span>
-    <span class="slot" id="slot3"><img src="image3.png" alt="slot image"></span>
+    <span class="slot" id="slot1"><img src="image1.png" alt="slot image 1"></span>
+    <span class="slot" id="slot2"><img src="image2.png" alt="slot image 2"></span>
+    <span class="slot" id="slot3"><img src="image3.png" alt="slot image 3"></span>
   </div>
   <button onclick="startSlotMachine()">슬롯머신 돌리기</button>
   <button onclick="stopSlotMachine()">멈추기</button>
@@ -54,6 +54,7 @@
     let isSpinning = false;
     document.getElementById("money").innerText = "남은 돈: " + money + "원";
 
+    // 파일 경로 없이 이미지 이름만 사용
     const symbols = ["image1.png", "image2.png", "image3.png", "image4.png", "image5.png"];
     const slots = document.querySelectorAll(".slot img");
     const resultElement = document.getElementById("result");
@@ -77,6 +78,7 @@
       const spinSlots = () => {
         slots.forEach((slot) => {
           slot.src = getRandomSymbol(); // 무작위로 이미지를 설정
+          slot.alt = "slot image"; // alt 속성 추가
         });
       };
 
@@ -92,6 +94,7 @@
       const finalSymbols = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()];
       slots.forEach((slot, index) => {
         slot.src = finalSymbols[index];
+        slot.alt = "slot image"; // alt 속성 추가
       });
 
       // 결과 출력 및 돈 업데이트
